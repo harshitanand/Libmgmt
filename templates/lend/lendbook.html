@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <form class="form-inline" method="post" action="/lend/lendbook/" role="form">
+            <div class="form-group">
+            <label for="sell">Book:</label>
+                <select class="form-control" name="bookname">
+                    {% for book in books %}
+                        <option value={{ book.name }}>{{ book.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <button type="submit" class="btn btn-success"> ISSUE </button>
+            </div>
+        </form>
+    </div>
+    {% if status %}
+        <div class="alert alert-success">
+            <strong>Success!</strong>Book Issued Successfully .
+        </div>
+        <div class="container">
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Name of User</th>
+        <th>Book Name</th>
+        <th>Group Name</th>
+        <th>Issued Books</th>
+        <th>Can Still Issue</th>
+      </tr>
+    </thead>
+    {% for h in history %}
+    <tbody>
+        <tr>
+            <td>{{ h.username }}</td>
+            <td>{{ h.bookname }}</td>
+            <td>{{ h.groupname }}</td>
+            <td>{{ h.issued }}</td>
+            <td>{{ h.can_issue }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+    </table>
+    </div>
+    {% else %}
+        <div class="alert alert-danger">
+                <strong>Danger!</strong> Inssufficient Stock to Issue Book.
+        </div>
+    {% endif %}
+{% endblock %}

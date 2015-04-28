@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+    {% if user.is_staff %}
+    <div>
+    <h1>Issue Table</h1>
+        <div class="container">
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Name of User</th>
+        <th>Book Name</th>
+        <th>Group Name</th>
+        <th>Issued Books</th>
+        <th>Can Still Issue</th>
+      </tr>
+    </thead>
+    {% for user in users %}
+    <tbody>
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.bookname }}</td>
+            <td>{{ user.groupname }}</td>
+            <td>{{ user.issued }}</td>
+            <td>{{ user.can_issue }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+    </table>
+    </div>
+    <h2>Book Details Table</h2>
+    <div class="container">
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Name of Book</th>
+        <th>Author</th>
+        <th>No. of Copies</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    {% for book in books %}
+    <tbody>
+        <tr>
+            <td>{{ book.name }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.copies }}</td>
+            <td>{{ book.status }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+    </table>
+    </div>
+    </div>
+    {% endif %}
+        {% else %}
+            <div class="alert alert-danger">
+                <strong>Danger!</strong> You Authorised to see the content of this Page.
+            </div>
+    {% endif %}
+
+{% endblock %}

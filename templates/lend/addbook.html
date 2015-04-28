@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        <form method="post" action="{% url 'add_book' %}" class="form-inline" role="form">
+            <label>Name of Book: <input type="text" name="book"></label>
+            <label>Name of Author: <input type="text" name="author"></label>
+            <label>Copies:
+                <select name="copies">
+                    <option value=1> 1 </option>
+                    <option value=2> 2 </option>
+                    <option value=3> 3 </option>
+                    <option value=4> 4 </option>
+                    <option value=5> 5 </option>
+                    <option value=6> 6 </option>
+                </select>
+            </label>
+            <label>Available Status:
+                <select name="status">
+                    <option value="True"> Yes </option>
+                    <option value="False"> No </option>
+                </select>
+            </label>
+            <button type="submit" class="btn btn-success">Add Book </button>
+        </form>
+    </div>
+    <div class="container">
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Name of Book</th>
+        <th>Author</th>
+        <th>No. of Copies</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    {% for book in books %}
+    <tbody>
+        <tr>
+            <td>{{ book.name }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.copies }}</td>
+            <td>{{ book.status }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+    </table>
+    </div>
+{% endblock %}

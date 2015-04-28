@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+        {% if user.is_staff %}
+            <div class="col-lg-12">
+                <a href="/lend/alldetails"><button class="btn btn-lg btn-success">Issue History & Book Details History</button></a>
+                <a href="{% url 'add_book' %}"><button class="btn btn-lg btn-success">Add a Book to Library</button></a>
+                <a href="/admin/auth/user/add/"><button class="btn btn-lg btn-success">Add a User to System</button></a>
+                <a href="/admin/auth/group/add/"><button class="btn btn-lg btn-success">Add a Group to System</button></a>
+                <a href="{% url 'lend_book' %}"><button class="btn btn-lg btn-success">Lend a Book from Library</button></a>
+            </div>
+        {% elif has_group %}
+            <div class="col-lg-12">
+            <a href="{% url 'lend_book' %}"><button class="btn btn-lg btn-success">Lend a Book from Library</button></a>
+            <a href="#"><button class="btn btn-lg btn-success">{{ user.usename }} info</button></a>
+            </div>
+        {% else %}
+            <div class="container">
+            <form method="post" action="{% url 'dashboard' %}" class="form-inline">
+            <label>Select Your Group</label>
+            <select class="form-control" name="filter">
+                <option value="students">Student</option>
+                <option value="teachers">Teacher</option>
+            </select>
+            <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+            </div>
+        {% endif %}
+{% endblock %}
