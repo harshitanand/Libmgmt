@@ -18,7 +18,12 @@
         <div class="alert alert-success">
             <strong>Success!</strong>Book Issued Successfully .
         </div>
-        <div class="container">
+    {% else %}
+        <div class="alert alert-danger">
+                <strong>Danger!</strong> Inssufficient Stock to Issue Book.
+        </div>
+    {% endif %}
+    <div class="container">
     <table class="table">
     <thead>
       <tr>
@@ -42,9 +47,4 @@
     {% endfor %}
     </table>
     </div>
-    {% else %}
-        <div class="alert alert-danger">
-                <strong>Danger!</strong> Inssufficient Stock to Issue Book.
-        </div>
-    {% endif %}
 {% endblock %}

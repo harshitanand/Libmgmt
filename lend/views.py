@@ -1,28 +1,33 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required, user_passes_test
-from models import Books, Issuebook
-
-group_name= ""
+from models import Books, Issuebook, usergroups
 
 def IsAdminUser(user):
     return user.is_staff
 
 @login_required
 def dasboard(request):
+    global group_name
     user = request.user
     if request.method == "GET":
         if not user.is_staff:
-            if user.groups.filter(name=['students', 'teachers']).exists():
-                return render(request, "lend/home.html", {'has_group': True})
-            else:
+            try:
+                if usergroups.objects.get(username=user.username):
+                    return render(request, "lend/home.html", {'has_group': True})
+            except:
                 return render(request, "lend/home.html", {'has_group': False})
         else:
             return render(request, "lend/home.html")
     elif request.method == "POST":
         gp_name = request.POST['filter']
-        group_name = gp_name
-        print gp_name
+        try:
+            g = usergroups.objects.get(username=user.username)
+            group_name = g.group
+        except:
+            user_group = usergroups(username=user.username, group=gp_name)
+            group_name = gp_name
+            user_group.save()
         group = Group.objects.get(name=gp_name)
         group.user_set.add(request.user)
         print user.groups.filter(name=gp_name).exists()
@@ -40,7 +45,7 @@ def addbook(request):
             status = request.POST['status']
             book = Books(name=name, author=author, copies=copies, status=status)
             book.save()
-            return redirect("/lend/")
+            return redirect("/lend/addbook")
         else:
             return render(request, "lend/addbook.html", {'books': books})
 
@@ -52,7 +57,8 @@ def lend(request):
             return teacherissue(request)
     else:
         books = Books.objects.all()
-        return render(request, "lend/lendbook.html", {'books': books})
+        issuedetails = Issuebook.objects.filter(username=request.user.username)
+        return render(request, "lend/lendbook.html", {'books': books, 'history': issuedetails})
 
 def studentissue(request):
     book = request.POST['bookname']
@@ -61,17 +67,19 @@ def studentissue(request):
     status = getbookstatus(request, book)
     if status:
         try:
-            issuedetails = Issuebook.objects.filter(username = u).order_by("-id")[0]
+            issuedetails = Issuebook.objects.filter(username=u).reverse()[0]
             if issuedetails.can_issue:
                 issuedetails.issued += 1
                 issuedetails.can_issue -= 1
                 status = True
+                issuedetails.save()
             else:
                 status = False
-            return render(request, "lend/lendbook.html", {'books': books,'status': status, 'history': issuedetails})
+            return render(request, "lend/lendbook.html", {'books': books, 'status': status, 'history': issuedetails})
         except:
-            issuedetails = Issuebook(username=u, bookname=book, groupname="student", issued=1, can_issue=2)
+            issuedetails = Issuebook(username=u, bookname=book, groupname="students", issued=1, can_issue=2)
             issuedetails.save()
+            issuedetails = Issuebook.objects.filter(username=u)
             return render(request, "lend/lendbook.html", {'books': books, 'status': True, 'history': issuedetails})
     else:
         return render(request, "lend/lendbook.html", {'books': books, 'status': False})

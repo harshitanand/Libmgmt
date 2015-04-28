@@ -20,3 +20,10 @@ class Issuebook(models.Model):
 
     def __str__(self):
         return self.username
+
+class usergroups(models.Model):
+    username = models.CharField(max_length=255, unique=True, blank=False)
+    group = models.CharField(max_length=120, blank=False)
+
+    def __str__(self):
+        return self.username
