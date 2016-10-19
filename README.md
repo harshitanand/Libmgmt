@@ -2,7 +2,6 @@
 A Library Management tool written in Django to perform basic tasks such as Issuing of Library books, Adding books, Assigning user passes etc can be managed.
 
 ![History Preview](https://raw.githubusercontent.com/harshitanand/Libmgmt/master/snapshots/issuehistory.png)
-![login Preview](https://raw.githubusercontent.com/harshitanand/Libmgmt/master/snapshots/login.png)
 
 ## Installation and Running
 
@@ -26,3 +25,8 @@ A Library Management tool written in Django to perform basic tasks such as Issui
 * Can reset it
 * Password Stored into hashes
 * Make a note that only admin can add books to stock
+
+## License
+>You can check out the full license [here](https://github.com/harshitanand/Libmgmt/blob/master/LICENSE)
+
+This project is licensed under the terms of the **MIT** license.
